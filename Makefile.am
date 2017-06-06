@@ -6,7 +6,6 @@ SUBDIRS = 			\
 	daemon 			\
 	libgdm 			\
 	utils 			\
-	pam_gdm			\
 	po 			\
 	tests 			\
 	$(NULL)
