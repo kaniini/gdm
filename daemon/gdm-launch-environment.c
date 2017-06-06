@@ -50,7 +50,7 @@
 #include "gdm-settings-direct.h"
 #include "gdm-settings-keys.h"
 
-#define INITIAL_SETUP_USERNAME "gnome-initial-setup"
+#define INITIAL_SETUP_USERNAME "_gnome-initial-setup"
 #define GDM_SESSION_MODE "gdm"
 #define INITIAL_SETUP_SESSION_MODE "initial-setup"
 #define GNOME_SESSION_SESSIONS_PATH DATADIR "/gnome-session/sessions"
@@ -197,6 +197,9 @@ build_launch_environment (GdmLaunchEnvironment *launch_environment,
                 char *seat_id;
 
                 seat_id = launch_environment->priv->x11_display_seat_id;
+                if (g_str_has_prefix (seat_id, "/org/freedesktop/ConsoleKit/")) {
+                        seat_id += strlen ("/org/freedesktop/ConsoleKit/");
+                }
 
                 g_hash_table_insert (hash, g_strdup ("GDM_SEAT_ID"), g_strdup (seat_id));
         }
@@ -224,6 +227,8 @@ on_session_setup_complete (GdmSession        *session,
                 gdm_session_set_environment_variable (launch_environment->priv->session, key, value);
         }
         g_hash_table_destroy (hash);
+
+        gdm_session_select_session_type (launch_environment->priv->session, "LoginWindow");
 }
 
 static void

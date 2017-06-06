@@ -20,6 +20,7 @@ AM_CPPFLAGS = \
 	-DGDM_SCREENSHOT_DIR=\"$(GDM_SCREENSHOT_DIR)\"		\
 	-DGDM_CACHE_DIR=\""$(localstatedir)/cache/gdm"\"	\
 	-DGDM_SESSION_DEFAULT_PATH=\"$(GDM_SESSION_DEFAULT_PATH)\" \
+	-DCONSOLEKIT_DIR=\"$(CONSOLEKIT_DIR)\" \
 	$(DISABLE_DEPRECATED_CFLAGS)			\
 	$(DAEMON_CFLAGS)				\
 	$(XLIB_CFLAGS)					\
@@ -264,6 +265,11 @@ EXTRA_gdm_SOURCES = 	\
 	$(XDMCP_SOURCES)	\
 	$(NULL)
 
+CONSOLE_KIT_SOURCES = 		\
+	$(NULL)
+
+EXTRA_gdm_SOURCES += $(CONSOLE_KIT_SOURCES)
+
 gdm_LDADD = \
 	$(top_builddir)/common/libgdmcommon.la	\
 	$(XLIB_LIBS)				\
@@ -274,6 +280,10 @@ gdm_LDADD = \
 	$(JOURNALD_LIBS)				\
 	$(EXTRA_DAEMON_LIBS)			\
 	$(NULL)
+
+if WITH_CONSOLE_KIT
+gdm_SOURCES += $(CONSOLE_KIT_SOURCES)
+endif
 
 CLEANFILES =					\
 	gdm-display-glue.c			\
